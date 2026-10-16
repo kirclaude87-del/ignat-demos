@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Динара — риэлтор в Уфе</title>
+<meta name="description" content="Динара, риэлтор в Уфе: покупка и продажа квартир, домов, участков, оценка стоимости, юридическое сопровождение сделки, помощь с ипотекой.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Динара — риэлтор в Уфе">
+<meta property="og:description" content="Купить, продать — без проблем!">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --card: rgba(16, 16, 20, 0.86);
+    --border: rgba(255, 255, 255, 0.09);
+    --text: #f2f2f2;
+    --muted: #9a9a9a;
+    --g1: #ff7ab6;
+    --g2: #b57bff;
+    --g3: #4fd1ff;
+    --r1: 255, 122, 182;
+    --r2: 181, 123, 255;
+    --r3: 79, 209, 255;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body { height: 100%; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 24px 16px;
+    overflow-x: hidden;
+  }
+
+  /* Звёздное небо */
+  #stars {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  /* Фоновое свечение, следующее за курсором */
+  .glow-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(600px circle at var(--mx, 50%) var(--my, 30%), rgba(var(--r2), 0.12), transparent 60%),
+      radial-gradient(500px circle at 80% 90%, rgba(var(--r3), 0.06), transparent 60%),
+      radial-gradient(500px circle at 10% 10%, rgba(var(--r1), 0.06), transparent 60%);
+    transition: background 0.2s;
+  }
+
+  .card {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    margin-block: auto;                 /* центр, но без обрезки верха на длинной странице */
+    padding: 48px 32px 40px;
+    border-radius: 28px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    text-align: center;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+    transform-style: preserve-3d;
+    transition: transform 0.25s ease-out;
+    animation: appear 0.9s cubic-bezier(.2,.8,.2,1) both;
+  }
+
+  @keyframes appear {
+    from { opacity: 0; transform: translateY(30px) scale(0.97); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  /* Аватар с инициалами */
+  .avatar {
+    width: 128px;
+    height: 128px;
+    margin: 0 auto 24px;
+    border-radius: 50%;
+    padding: 3px;
+    background: conic-gradient(from 0deg, var(--g1), var(--g2), var(--g3), var(--g1));
+  }
+  .avatar span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--bg);
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .avatar img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--bg);
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Имя с градиентным свечением */
+  .name {
+    font-size: clamp(2rem, 8vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+    background: linear-gradient(90deg, var(--g1), var(--g2), var(--g3), var(--g2), var(--g1));
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 18px rgba(var(--r2), 0.45));
+  }
+  .name small {
+    display: block;
+    font-size: 0.85em;
+  }
+  @keyframes shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+  }
+  @keyframes pulse {
+    0%, 100% { filter: drop-shadow(0 0 14px rgba(var(--r2), 0.35)); }
+    50%      { filter: drop-shadow(0 0 26px rgba(var(--r1), 0.55)); }
+  }
+
+  .role {
+    margin-top: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .role svg { width: 16px; height: 16px; stroke: var(--g2); }
+
+  .tagline {
+    margin: 22px auto 0;
+    max-width: 320px;
+    color: var(--muted);
+    line-height: 1.55;
+    font-size: 0.98rem;
+  }
+
+  /* Опыт в цифрах */
+  .stats { margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stats div { padding: 14px 10px; border-radius: 14px; border: 1px solid var(--border); background: rgba(255, 255, 255, 0.025); }
+  .stats b { display: block; font-size: 1.5rem; font-weight: 800; color: var(--text); }
+  .stats span { display: block; margin-top: 2px; font-size: 0.85rem; color: var(--muted); }
+
+  /* Блок «С чем помогу» */
+  .pains { margin-top: 28px; text-align: left; }
+  .pains h2 {
+    margin-bottom: 14px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .pains ul { list-style: none; display: grid; gap: 10px; }
+  .pains li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.025);
+    transition: border-color 0.25s, transform 0.25s, background 0.25s;
+  }
+  .pains li:hover {
+    border-color: rgba(var(--r2), 0.45);
+    background: rgba(var(--r2), 0.06);
+    transform: translateX(3px);
+  }
+  .pains li svg {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    margin-top: 1px;
+    padding: 3px;
+    border-radius: 50%;
+    stroke: #0a0a0a;
+    background: linear-gradient(135deg, var(--g1), var(--g3));
+  }
+  .pains b { display: block; font-size: 0.95rem; font-weight: 600; color: var(--text); line-height: 1.35; }
+  .pains span { display: block; margin-top: 3px; font-size: 0.88rem; color: var(--muted); line-height: 1.45; }
+
+  /* Отзывы */
+  .reviews { margin-top: 28px; text-align: left; }
+  .reviews h2, .proof h2 {
+    margin-bottom: 14px;
+    text-align: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .review {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.025);
+  }
+  .review + .review { margin-top: 10px; }
+  .review p { font-size: 0.92rem; line-height: 1.5; color: var(--text); }
+  .review span { display: block; margin-top: 6px; font-size: 0.82rem; color: var(--muted); }
+  .review .stars { color: #ffc94d; letter-spacing: 1px; }
+  .review a { flex: none; }
+  .review img {
+    display: block;
+    width: 52px;
+    height: 52px;
+    border-radius: 10px;
+    object-fit: cover;
+    object-position: top;
+    border: 1px solid var(--border);
+    opacity: 0.85;
+    transition: opacity 0.2s;
+  }
+  .review a:hover img { opacity: 1; }
+
+  /* Фото с клиентами */
+  .proof { margin-top: 26px; }
+  .proof-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .proof-row img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    transition: transform 0.2s;
+  }
+  .proof-row a:hover img { transform: translateY(-2px); }
+  .proof p { margin-top: 8px; font-size: 0.8rem; color: var(--muted); }
+
+  /* Просмотр фото поверх сайта */
+  .viewer {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 56px 16px 24px;
+    background: rgba(0, 0, 0, 0.88);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    cursor: zoom-out;
+  }
+  .viewer.open { opacity: 1; pointer-events: auto; }
+  .viewer img { max-width: 100%; max-height: 100%; border-radius: 12px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6); }
+  .viewer button {
+    position: absolute;
+    top: calc(12px + env(safe-area-inset-top, 0px));
+    right: 12px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .cta-note {
+    margin-top: 24px;
+    color: var(--muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+  .cta-note + .cta { margin-top: 14px; }
+
+  .divider {
+    height: 1px;
+    margin: 30px 0 26px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+
+  /* Иконки соцсетей */
+  .socials {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .social {
+    position: relative;
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+    cursor: pointer;
+    text-decoration: none;
+    font: inherit;
+    transition: transform 0.25s cubic-bezier(.2,.8,.2,1), box-shadow 0.25s, border-color 0.25s, color 0.25s;
+  }
+  .social svg { width: 24px; height: 24px; transition: transform 0.25s; }
+  .social::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, var(--c1), var(--c2));
+    opacity: 0;
+    transition: opacity 0.25s;
+    z-index: -1;
+  }
+  .social:hover, .social:focus-visible {
+    transform: translateY(-5px);
+    border-color: transparent;
+    box-shadow: 0 10px 30px -6px var(--c1);
+    outline: none;
+  }
+  .social:hover::before, .social:focus-visible::before { opacity: 1; }
+  .social:hover svg { transform: scale(1.12) rotate(-6deg); }
+  .social:active { transform: translateY(-2px) scale(0.96); }
+
+  .social.tel  { --c1: #34d399; --c2: #10b981; }
+  .social.tg   { --c1: #2aabee; --c2: #229ed9; }
+  .social.max  { --c1: #6a5cff; --c2: #2f7bff; }
+
+  /* Подсказка над иконкой */
+  .social[data-tip]::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    padding: 5px 10px;
+    border-radius: 8px;
+    background: #1b1b1b;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    white-space: nowrap;
+    color: var(--text);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .social:hover::after, .social:focus-visible::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .handle {
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .handle b { color: var(--text); font-weight: 600; }
+  .handle a { color: inherit; text-decoration: none; }
+  .handle a:hover b { color: var(--g3); }
+  .handle + .handle { margin-top: 6px; }
+
+  /* Кнопка «Написать мне» */
+  .cta {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 28px;
+    padding: 17px 24px;
+    border-radius: 16px;
+    border: none;
+    color: #fff;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-decoration: none;
+    cursor: pointer;
+    overflow: hidden;
+    isolation: isolate;
+    background: linear-gradient(90deg, var(--g1), var(--g2), var(--g3), var(--g1));
+    background-size: 300% 100%;
+    
+    transition: transform 0.2s;
+  }
+  .cta::before {
+    /* внутренняя заливка, чтобы получилась «рамка» */
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: 14px;
+    background: #121212;
+    z-index: -1;
+    transition: opacity 0.3s;
+  }
+  .cta::after {
+    /* блик, пробегающий по кнопке */
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -60%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(110deg, transparent, rgba(255,255,255,0.35), transparent);
+    transform: skewX(-20deg);
+    animation: shine 3.2s ease-in-out infinite;
+  }
+  .cta:hover::before, .cta:focus-visible::before { opacity: 0; }
+  .cta:hover { transform: translateY(-2px); }
+  .cta:active { transform: scale(0.97); }
+  .cta:focus-visible { outline: 2px solid var(--g3); outline-offset: 4px; }
+  .cta svg { width: 20px; height: 20px; transition: transform 0.3s; }
+  .cta:hover svg { transform: translateX(4px) rotate(-12deg); }
+
+  @keyframes breathe {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(var(--r2), 0.0), 0 8px 30px -8px rgba(var(--r2), 0.5); }
+    50%      { box-shadow: 0 0 0 6px rgba(var(--r2), 0.08), 0 8px 40px -6px rgba(var(--r1), 0.6); }
+  }
+  @keyframes shine {
+    0%   { left: -60%; }
+    60%, 100% { left: 130%; }
+  }
+
+  /* Ripple при клике */
+  .ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: scale(0);
+    animation: ripple 0.6s ease-out forwards;
+    pointer-events: none;
+  }
+  @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+
+  /* Уведомление */
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    transform: translate(-50%, 20px);
+    padding: 12px 20px;
+    border-radius: 12px;
+    background: #1b1b1b;
+    border: 1px solid var(--border);
+    color: var(--text);
+    font-size: 0.95rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, transform 0.3s;
+    z-index: 10;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  footer {
+    margin-top: 26px;
+    font-size: 0.8rem;
+    color: #555;
+  }
+
+  /* Телефоны */
+  @media (max-width: 480px) {
+    .card { padding: 40px 22px 32px; border-radius: 24px; }
+    .avatar { width: 112px; height: 112px; }
+    .avatar span { font-size: 28px; }
+    .socials { gap: 10px; }
+    .social { width: 50px; height: 50px; border-radius: 14px; }
+  }
+
+  @media (hover: none) {
+    .social[data-tip]::after { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+<script>
+  // Случайная тема при каждом заходе (подряд не повторяется)
+  (() => {
+    const themes = [
+      { name: 'Аметист',         g: ['#ff7ab6', '#b57bff', '#4fd1ff'] },
+      { name: 'Северное сияние', g: ['#3dffb0', '#3ad6ff', '#8a7bff'] },
+      { name: 'Океан',           g: ['#38bdf8', '#6366f1', '#22d3ee'] },
+      { name: 'Фуксия',          g: ['#ff4fd8', '#c04bff', '#ff7aa8'] },
+      { name: 'Лёд',             g: ['#e0f2ff', '#8ecbff', '#a5b4fc'] },
+      { name: 'Мята и лаванда',  g: ['#6ee7b7', '#c4b5fd', '#f9a8d4'] },
+      { name: 'Коралл',          g: ['#ff7a7a', '#ff5fa2', '#a77bff'] }
+    ];
+    let lastI = -1;
+    try { lastI = +localStorage.getItem('vizitka-theme'); } catch {}
+    let i;
+    i = 2; // постоянная спокойная тема «Океан»
+    try { localStorage.setItem('vizitka-theme', i); } catch {}
+
+    const th = themes[i];
+    const rgb = hex => [1, 3, 5].map(k => parseInt(hex.slice(k, k + 2), 16));
+    const root = document.documentElement.style;
+    th.g.forEach((c, k) => {
+      root.setProperty('--g' + (k + 1), c);
+      root.setProperty('--r' + (k + 1), rgb(c).join(', '));
+    });
+
+    // Параметры звёзд: направление, плотность, форма
+    const ang = Math.random() * Math.PI * 2;
+    window.__theme = {
+      tints: [[255, 255, 255], ...th.g.map(c => rgb(c).map(v => Math.round(v + (255 - v) * 0.55)))],
+      dir: [Math.cos(ang), Math.sin(ang)],
+      density: 0.7 + Math.random() * 0.7,
+      sparkle: Math.random() < 0.5
+    };
+  })();
+</script>
+</head>
+<body>
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="glow-bg" id="glow"></div>
+
+  <main class="card" id="card">
+    <div class="avatar"><span>Д</span></div>
+
+    <h1 class="name">Динара</h1>
+
+    <div class="role">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/>
+      </svg>
+      Риэлтор · Уфа
+    </div>
+
+    <p class="tagline">Купить, продать — без проблем!</p>
+
+    
+    <section class="pains">
+      <h2>Услуги</h2>
+      <ul>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div><b>Покупка и продажа</b><span>квартир, домов, участков</span></div></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div><b>Оценка рыночной стоимости</b></div></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div><b>Юридическое сопровождение сделки</b></div></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><div><b>Помощь с ипотекой и документами</b></div></li>
+      </ul>
+    </section>
+
+    
+    
+    <div class="divider"></div>
+
+    <div class="socials">
+      <a class="social tel" href="tel:+79173732019" data-tip="Позвонить" aria-label="Позвонить">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/>
+        </svg>
+      </a>
+      <a class="social tg" href="https://t.me/dinara454mil" target="_blank" rel="noopener" data-tip="Telegram" aria-label="Telegram">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M21.94 4.3 18.9 19.04c-.23 1.03-.83 1.29-1.68.8l-4.64-3.42-2.24 2.16c-.25.25-.46.46-.94.46l.33-4.74 8.63-7.8c.38-.33-.08-.52-.58-.19L7.11 13.03 2.52 11.6c-1-.31-1.02-1 .21-1.48l17.93-6.91c.83-.31 1.56.19 1.28 1.09Z"/>
+        </svg>
+      </a>
+      <button class="social max" type="button" id="maxBtn" data-tip="MAX" aria-label="MAX: скопировать номер">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z"/>
+          <path d="M8 15V9l4 4 4-4v6"/>
+        </svg>
+      </button>
+    </div>
+
+    <p class="handle">Телефон: <a href="tel:+79173732019"><b>8-917-373-20-19</b></a></p>
+
+    <p class="cta-note">Напишите, и я подскажу, с чего начать.</p>
+    <a class="cta" id="cta" href="https://t.me/dinara454mil" target="_blank" rel="noopener">
+      Написать мне
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7Z"/>
+      </svg>
+    </a>
+
+    <footer>© <span id="year"></span> Динара</footer>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Просмотр фото">
+    <button type="button" aria-label="Закрыть">×</button>
+    <img alt="">
+  </div>
+
+<script>
+  const toastEl = document.getElementById('toast');
+  let toastTimer;
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2000);
+  }
+
+  // MAX: по номеру телефона — копируем номер
+  document.getElementById('maxBtn').addEventListener('click', async () => {
+    const phone = '+79173732019';
+    try {
+      await navigator.clipboard.writeText(phone);
+      toast('Номер скопирован — найдите Динару в MAX');
+    } catch {
+      toast('MAX: 8-917-373-20-19');
+    }
+  });
+
+
+  // Фото и отзывы открываются поверх сайта; закрыть — крестик, клик в любом месте или Esc
+  const viewer = document.getElementById('viewer');
+  const viewerImg = viewer.querySelector('img');
+  document.querySelectorAll('.review a, .proof-row a').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    viewerImg.src = a.href;
+    viewerImg.alt = a.querySelector('img').alt;
+    viewer.classList.add('open');
+  }));
+  const closeViewer = () => viewer.classList.remove('open');
+  viewer.addEventListener('click', closeViewer);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeViewer(); });
+
+  // Ripple-эффект на кнопке
+  const cta = document.getElementById('cta');
+  cta.addEventListener('pointerdown', e => {
+    const r = cta.getBoundingClientRect();
+    const size = Math.max(r.width, r.height);
+    const s = document.createElement('span');
+    s.className = 'ripple';
+    s.style.width = s.style.height = size + 'px';
+    s.style.left = (e.clientX - r.left - size / 2) + 'px';
+    s.style.top = (e.clientY - r.top - size / 2) + 'px';
+    cta.appendChild(s);
+    setTimeout(() => s.remove(), 600);
+  });
+
+  // Звёздное небо: дрейф слоями, мерцание, мягкая смена оттенков, падающие звёзды
+  (() => {
+    const cv = document.getElementById('stars');
+    const ctx = cv.getContext('2d');
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // белый и бледные холодные оттенки — без золотого
+    const T = window.__theme || { tints: [[255,255,255]], dir: [-1, 0.3], density: 1, sparkle: false };
+    const tints = T.tints;
+    let w, h, dpr, stars = [], shooters = [], px = 0, py = 0, tx = 0, ty = 0, nextShot = 0, last = 0;
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = window.innerWidth; h = window.innerHeight;
+      cv.width = w * dpr; cv.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const count = Math.min(380, Math.round(w * h / 4500 * T.density));
+      stars = Array.from({ length: count }, () => {
+        const z = Math.random();               // глубина: 0 — далеко, 1 — близко
+        return {
+          x: Math.random() * w, y: Math.random() * h, z,
+          r: 0.3 + z * 1.4,
+          tw: 0.3 + Math.random() * 0.9,         // скорость мерцания
+          ph: Math.random() * Math.PI * 2,
+          shift: Math.random() < 0.3,          // ~30% звёзд переливаются
+          ci: Math.floor(Math.random() * tints.length),
+          cs: 0.15 + Math.random() * 0.35      // скорость перелива
+        };
+      });
+    }
+
+    function mix(a, b, t) { return a.map((v, i) => Math.round(v + (b[i] - v) * t)); }
+
+    function shoot(now) {
+      const fromLeft = Math.random() < 0.5;
+      shooters.push({
+        x: fromLeft ? Math.random() * w * 0.5 : w * 0.5 + Math.random() * w * 0.5,
+        y: Math.random() * h * 0.4,
+        vx: (fromLeft ? 1 : -1) * (6 + Math.random() * 4),
+        vy: 2.5 + Math.random() * 2,
+        life: 0, max: 50 + Math.random() * 30
+      });
+      nextShot = now + 9000 + Math.random() * 9000;
+    }
+
+    function frame(now) {
+      const t = now / 1000;
+      const dt = last ? Math.min((now - last) / 16.67, 3) : 1;  // одинаковая скорость при 60 и 120 Гц
+      last = now;
+      ctx.clearRect(0, 0, w, h);
+      px += (tx - px) * 0.05; py += (ty - py) * 0.05;
+
+      for (const s of stars) {
+        if (!still) {
+          const sp = (0.06 + s.z * 0.24) * dt;   // ближние летят быстрее
+          s.x += T.dir[0] * sp; s.y += T.dir[1] * sp;
+          if (s.x < -5) s.x = w + 5; else if (s.x > w + 5) s.x = -5;
+          if (s.y < -5) s.y = h + 5; else if (s.y > h + 5) s.y = -5;
+        }
+        const x = s.x + px * s.z * 25, y = s.y + py * s.z * 25;
+        const a = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(t * s.tw + s.ph));
+        let c = tints[0];
+        if (s.shift) {
+          const k = (t * s.cs + s.ph) % tints.length;
+          const i = Math.floor(k);
+          c = mix(tints[i], tints[(i + 1) % tints.length], k - i);
+        }
+        ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+        ctx.beginPath(); ctx.arc(x, y, s.r, 0, Math.PI * 2); ctx.fill();
+        if (T.sparkle && s.r > 1.1) {           // лучики-искорки у крупных звёзд
+          const L = s.r * 4.5;
+          ctx.strokeStyle = `rgba(${c[0]},${c[1]},${c[2]},${a * 0.6})`;
+          ctx.lineWidth = 0.7;
+          ctx.beginPath();
+          ctx.moveTo(x - L, y); ctx.lineTo(x + L, y);
+          ctx.moveTo(x, y - L); ctx.lineTo(x, y + L);
+          ctx.stroke();
+        }
+        if (s.r > 1.2) {                        // ореол у крупных звёзд
+          ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${a * 0.15})`;
+          ctx.beginPath(); ctx.arc(x, y, s.r * 3, 0, Math.PI * 2); ctx.fill();
+        }
+      }
+
+      if (!still) {
+        if (now > nextShot) shoot(now);
+        shooters = shooters.filter(m => m.life < m.max);
+        for (const m of shooters) {
+          m.life += dt; m.x += m.vx * dt; m.y += m.vy * dt;
+          const fade = 1 - m.life / m.max;
+          const g = ctx.createLinearGradient(m.x, m.y, m.x - m.vx * 12, m.y - m.vy * 12);
+          g.addColorStop(0, `rgba(255,255,255,${0.9 * fade})`);
+          g.addColorStop(1, 'rgba(255,255,255,0)');
+          ctx.strokeStyle = g; ctx.lineWidth = 1.6; ctx.lineCap = 'round';
+          ctx.beginPath(); ctx.moveTo(m.x, m.y); ctx.lineTo(m.x - m.vx * 12, m.y - m.vy * 12); ctx.stroke();
+        }
+        requestAnimationFrame(frame);
+      }
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+    window.addEventListener('mousemove', e => { tx = e.clientX / w - 0.5; ty = e.clientY / h - 0.5; });
+    nextShot = performance.now() + 1500;
+    requestAnimationFrame(frame);
+  })();
+
+  // Наклон карточки и свечение за курсором (только на устройствах с мышью)
+  const card = document.getElementById('card');
+  const glow = document.getElementById('glow');
+  if (window.matchMedia('(hover: hover)').matches &&
+      !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.addEventListener('mousemove', e => {
+      glow.style.setProperty('--mx', e.clientX + 'px');
+      glow.style.setProperty('--my', e.clientY + 'px');
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width / 2) / r.width;
+      const y = (e.clientY - r.top - r.height / 2) / r.height;
+      card.style.transform = `perspective(900px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg)`;
+    });
+    document.addEventListener('mouseleave', () => { card.style.transform = ''; });
+  }
+</script>
+</body>
+</html>
