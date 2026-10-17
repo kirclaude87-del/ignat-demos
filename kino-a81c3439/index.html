@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Студия детейлинга: макет</title>
+<style>
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; background: #07080b; color: #f2f4f8; font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+a { color: inherit; text-decoration: none; }
+
+/* Всё, что появляется после заставки */
+.rise { opacity: 0; transform: translateY(24px); transition: opacity .9s ease, transform .9s ease; }
+body.ready .rise { opacity: 1; transform: none; }
+body.ready .rise.d1 { transition-delay: .15s; }
+body.ready .rise.d2 { transition-delay: .35s; }
+
+.top { position: absolute; z-index: 5; top: 0; left: 0; right: 0; display: flex; align-items: center; gap: 28px; padding: 22px 4vw; }
+.logo { font-weight: 800; letter-spacing: .08em; font-size: 20px; }
+.logo b { font-weight: 300; margin-left: 6px; }
+.top nav { display: flex; gap: 28px; margin-left: auto; font-size: 15px; }
+.phone { font-size: 15px; }
+.pill { display: inline-block; border: 1px solid #fff; border-radius: 999px; padding: 12px 22px; font-size: 14px; font-weight: 600; transition: background .25s, color .25s; }
+.pill:hover { background: #fff; color: #07080b; }
+.pill.big { padding: 18px 34px; font-size: 16px; }
+
+.hero { position: relative; min-height: 100vh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 4vw 7vh;
+  background:
+    linear-gradient(115deg, transparent 38%, rgba(255,255,255,.05) 46%, transparent 54%),
+    radial-gradient(ellipse at 72% 38%, #2b313d 0%, #0e1015 55%, #05060a 100%); }
+.hero-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 28px; flex-wrap: wrap; }
+h1 { margin: 0 0 22px; font-weight: 300; font-size: clamp(46px, 8.5vw, 124px); line-height: 1.04; letter-spacing: -.02em; }
+.lead { max-width: 520px; margin: 0; font-size: 18px; line-height: 1.5; color: #c4cad6; }
+
+#services { padding: 12vh 4vw; background: #0b0d12; }
+#services h2 { margin: 0 0 36px; font-weight: 300; font-size: clamp(32px, 4.5vw, 60px); letter-spacing: -.01em; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+.card { padding: 26px; border: 1px solid #262b36; border-radius: 18px; background: linear-gradient(160deg, #141821, #0d1016); }
+.card h3 { margin: 0 0 10px; font-size: 22px; font-weight: 600; }
+.card p { margin: 0 0 18px; color: #aeb5c2; line-height: 1.45; }
+.card .price { font-size: 20px; font-weight: 600; }
+.note { margin-top: 22px; color: #6d7482; font-size: 13px; }
+
+footer { padding: 10vh 4vw 12vh; text-align: center; background: #07080b; }
+footer h2 { margin: 0 0 24px; font-weight: 300; font-size: clamp(30px, 4vw, 52px); }
+
+/* Заставка: машина выезжает из темноты, фары мигают, экран гаснет и открывается сайт */
+#intro { position: fixed; inset: 0; z-index: 50; background: #040507; overflow: hidden; cursor: pointer; animation: introOut .8s ease 3.1s forwards; }
+#intro .road { position: absolute; left: 0; right: 0; top: 66%; height: 2px; background: linear-gradient(90deg, transparent, #3a4150 20%, #3a4150 80%, transparent); }
+#intro .skip { position: absolute; right: 4vw; bottom: 5vh; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: #5d6471; }
+.car { position: absolute; left: 50%; top: 66%; width: min(92vw, 1150px); margin-left: calc(min(92vw, 1150px) / -2);
+  transform: translate(0, -69.4%); animation: drive 2.5s cubic-bezier(.12, .75, .25, 1) both; }
+.car img { display: block; width: 100%; height: auto; animation: settle 2.5s ease both;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 52%, transparent 76%); mask-image: radial-gradient(ellipse at center, #000 52%, transparent 76%); }
+/* Машина смотрит влево и едет справа налево: свет идёт вперёд из настоящих фар */
+.beam { position: absolute; right: 87%; top: 41%; width: 72vw; height: 26%; pointer-events: none;
+  background: linear-gradient(270deg, rgba(255, 255, 255, .9), rgba(255, 255, 255, 0));
+  clip-path: polygon(100% 40%, 0 0, 0 100%, 100% 60%); animation: beam 3.1s ease both; }
+.lamp { position: absolute; left: 9.5%; top: 43%; width: 7%; height: 9%; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 255, 255, .95), rgba(255, 255, 255, 0) 68%); animation: beam 3.1s ease both; }
+@keyframes drive { from { transform: translate(130vw, -69.4%); filter: blur(10px); } 65% { filter: blur(3px); } to { transform: translate(0, -69.4%); filter: blur(0); } }
+@keyframes settle { 0%, 80% { transform: translateY(0); } 86% { transform: translateY(6px); } 93% { transform: translateY(-2px); } 100% { transform: translateY(0); } }
+@keyframes beam { 0% { opacity: .25; } 70% { opacity: .25; } 80% { opacity: 1; } 90% { opacity: .5; } 100% { opacity: .7; } }
+@keyframes introOut { to { opacity: 0; visibility: hidden; } }
+@media (prefers-reduced-motion: reduce) { #intro { display: none; } .rise { transition: none; } }
+
+@media (max-width: 700px) {
+  .top nav, .phone { display: none; }
+  .top { justify-content: space-between; }
+  .hero { padding-bottom: 5vh; }
+}
+</style>
+<noscript><style>.rise { opacity: 1; transform: none; }</style></noscript>
+</head>
+<body>
+
+<div id="intro" aria-hidden="true">
+  <div class="road"></div>
+  <div class="car">
+    <div class="beam"></div>
+    <div class="lamp"></div>
+    <img src="assets/car.jpg" alt="">
+  </div>
+  <div class="skip">нажмите, чтобы пропустить</div>
+</div>
+
+<header class="top rise">
+  <div class="logo">AUTO<b>STUDIO</b></div>
+  <nav><a href="#services">Услуги</a><a href="#contact">Контакты</a></nav>
+  <a class="phone" href="tel:+70000000000">+7 (000) 000-00-00</a>
+  <a class="pill" href="#contact">Связаться с нами →</a>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-row">
+      <div>
+        <h1 class="rise d1">Детейлинг<br>автомобиля</h1>
+        <p class="lead rise d2">Возвращаем машине вид из салона: полировка, керамика, химчистка. Запись через Telegram за одну минуту.</p>
+      </div>
+      <a class="pill big rise d2" href="#services">Выбрать услугу →</a>
+    </div>
+  </section>
+
+  <section id="services">
+    <h2>Услуги</h2>
+    <div class="cards">
+      <div class="card"><h3>Полировка кузова</h3><p>Убираем царапины и возвращаем глубокий блеск краски.</p><div class="price">от 8 000 ₽</div></div>
+      <div class="card"><h3>Керамика</h3><p>Защитное покрытие на годы: вода и грязь скатываются сами.</p><div class="price">от 25 000 ₽</div></div>
+      <div class="card"><h3>Химчистка салона</h3><p>Кожа, ткань, потолок и пластик. Без запахов и разводов.</p><div class="price">от 6 000 ₽</div></div>
+      <div class="card"><h3>Защитная плёнка</h3><p>Прозрачная броня от сколов и царапин.</p><div class="price">от 40 000 ₽</div></div>
+    </div>
+    <div class="note">Макет: услуги и цены примерные, настоящие подставим после вашего ответа.</div>
+  </section>
+</main>
+
+<footer id="contact">
+  <h2>Запишитесь за минуту</h2>
+  <a class="pill big" href="#">Написать в Telegram →</a>
+</footer>
+
+<script>
+// Заставка длится около 4 секунд. Пропустить: нажатие или любая клавиша. Без анимации (prefers-reduced-motion) сайт открывается сразу.
+(function () {
+  var body = document.body;
+  var intro = document.getElementById('intro');
+  function reveal() { body.classList.add('ready'); }
+  function finish() { reveal(); if (intro) intro.style.display = 'none'; }
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!intro || reduce) { finish(); return; }
+  intro.addEventListener('click', finish);
+  document.addEventListener('keydown', finish);
+  intro.addEventListener('animationend', function (e) { if (e.target === intro) finish(); });
+  setTimeout(reveal, 3000);  // сайт проявляется, пока заставка гаснет
+  setTimeout(finish, 4500);  // страховка
+})();
+</script>
+</body>
+</html>
