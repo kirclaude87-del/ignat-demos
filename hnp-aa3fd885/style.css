@@ -88,7 +88,7 @@ body { display: flex; align-items: center; justify-content: center; height: 100v
 .sh { flex: 1; min-height: 0; border-radius: 8px; background: #262d57; padding: 3px 5px; display: flex; flex-direction: column; gap: 3px; cursor: pointer; }
 .tag { align-self: flex-start; font-size: 10px; font-weight: 800; border-radius: 5px; padding: 0 6px; background: #5ce1ff; color: #06202a; white-space: nowrap; }
 .row { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; min-height: 0; }
-.slot { border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: clamp(14px, 4.4vw, 24px); border: 2px dashed #5ce1ff88; }
+.slot { width: 100%; aspect-ratio: 1; align-self: center; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: clamp(16px, 6vw, 30px); border: 2px dashed #5ce1ff88; }
 .slot.filled { background: #323a6d; border: 0; }
 
 .tip { position: absolute; font-size: 10px; font-weight: 800; border-radius: 8px; padding: 3px 7px; pointer-events: none; }
