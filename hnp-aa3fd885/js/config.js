@@ -6,15 +6,15 @@ Hnp.config = Object.freeze({
   LIFE_REGEN_MS: 300000, // +1 жизнь каждые 5 минут
   SHELF_CAPACITY: 4,
   GROUPS: Object.freeze(['dairy', 'veg', 'meat', 'sweet']),
-  COOL_MS: 6000, // за сколько закрытый холодильник остывает с полного нагрева до нуля
+  COOL_MS: 4000, // за сколько закрытый холодильник остывает с полного нагрева до нуля
   TIME_START_S: 120, // время 1-го уровня
   TIME_STEP_S: 5, // на столько секунд меньше с каждым уровнем
   TIME_MIN_S: 60,
   ITEMS_MIN: 8, // продуктов на 1-м уровне
   ITEMS_MAX: 16, // продуктов на уровне DIFFICULTY_CAP_LEVEL и дальше
   DIFFICULTY_CAP_LEVEL: 10,
-  HEAT_FILL_MS_EASY: 10000, // за сколько открытая дверь заполняет шкалу на 1-м уровне
-  HEAT_FILL_MS_HARD: 5000, // то же на уровне DIFFICULTY_CAP_LEVEL и дальше
+  HEAT_FILL_MS_EASY: 15000, // за сколько открытая дверь заполняет шкалу на 1-м уровне
+  HEAT_FILL_MS_HARD: 8000, // то же на уровне DIFFICULTY_CAP_LEVEL и дальше
   INTERSTITIAL_EVERY: 2, // реклама после каждого 2-го пройденного уровня
   SAVE_VERSION: 1,
 });
