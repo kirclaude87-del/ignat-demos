@@ -36,7 +36,7 @@ h1 { margin: 0 0 22px; font-weight: 300; font-size: clamp(46px, 8.5vw, 124px); l
 
 #services { padding: 12vh 4vw; background: #0b0d12; }
 #services h2 { margin: 0 0 36px; font-weight: 300; font-size: clamp(32px, 4.5vw, 60px); letter-spacing: -.01em; }
-.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 18px; }
 .card { padding: 26px; border: 1px solid #262b36; border-radius: 18px; background: linear-gradient(160deg, #141821, #0d1016); }
 .card h3 { margin: 0 0 10px; font-size: 22px; font-weight: 600; }
 .card p { margin: 0 0 18px; color: #aeb5c2; line-height: 1.45; }
@@ -45,6 +45,30 @@ h1 { margin: 0 0 22px; font-weight: 300; font-size: clamp(46px, 8.5vw, 124px); l
 
 footer { padding: 10vh 4vw 12vh; text-align: center; background: #07080b; }
 footer h2 { margin: 0 0 24px; font-weight: 300; font-size: clamp(30px, 4vw, 52px); }
+
+/* Разделы под первым экраном */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s ease, transform .9s ease; }
+.reveal.in { opacity: 1; transform: none; }
+.block { padding: 12vh 4vw; background: #07080b; }
+.block.dark { background: #0b0d12; }
+.block h2 { margin: 0 0 34px; font-weight: 300; font-size: clamp(32px, 4.5vw, 60px); letter-spacing: -.01em; }
+.big-text { max-width: 860px; margin: 0 0 40px; font-size: clamp(20px, 2.4vw, 30px); line-height: 1.45; color: #d6dae3; font-weight: 300; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; }
+.facts div { padding: 22px 0; border-top: 1px solid #2a303c; }
+.facts b { display: block; font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+.facts span { color: #9aa2b1; }
+.card ul { margin: 0 0 18px; padding-left: 18px; color: #aeb5c2; line-height: 1.6; font-size: 15px; }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 26px; }
+.steps i { display: block; font-style: normal; font-size: 54px; font-weight: 200; color: #3a4252; margin-bottom: 8px; }
+.steps h3 { margin: 0 0 8px; font-size: 22px; font-weight: 600; }
+.steps p { margin: 0; color: #aeb5c2; line-height: 1.5; }
+.faq { max-width: 860px; }
+.faq details { border-bottom: 1px solid #262b36; padding: 20px 0; }
+.faq summary { cursor: pointer; font-size: 20px; list-style: none; display: flex; justify-content: space-between; gap: 20px; }
+.faq summary::after { content: "+"; color: #8a93a4; font-size: 26px; line-height: 1; }
+.faq details[open] summary::after { content: "−"; }
+.faq p { margin: 14px 0 0; color: #aeb5c2; line-height: 1.55; }
+.where { margin: 28px 0 0; color: #8a93a4; line-height: 1.7; }
 
 /* Заставка: машина выезжает из темноты, фары мигают, экран гаснет и открывается сайт */
 #intro { position: fixed; inset: 0; z-index: 50; background: #040507; overflow: hidden; cursor: pointer; animation: introOut .8s ease 3.1s forwards; }
@@ -72,7 +96,7 @@ footer h2 { margin: 0 0 24px; font-weight: 300; font-size: clamp(30px, 4vw, 52px
   .hero { padding-bottom: 5vh; }
 }
 </style>
-<noscript><style>.rise { opacity: 1; transform: none; }</style></noscript>
+<noscript><style>.rise, .reveal { opacity: 1; transform: none; }</style></noscript>
 </head>
 <body>
 
@@ -89,8 +113,8 @@ footer h2 { margin: 0 0 24px; font-weight: 300; font-size: clamp(30px, 4vw, 52px
 <header class="top rise">
   <div class="logo">AUTO<b>STUDIO</b></div>
   <nav><a href="#services">Услуги</a><a href="#contact">Контакты</a></nav>
-  <a class="phone" href="tel:+70000000000">+7 (000) 000-00-00</a>
-  <a class="pill" href="#contact">Связаться с нами →</a>
+  <a class="phone" data-phone-link href="tel:+70000000000"><span data-phone-text>+7 (000) 000-00-00</span></a>
+  <a class="pill" data-phone-link href="tel:+70000000000">Позвонить →</a>
 </header>
 
 <main>
@@ -98,29 +122,77 @@ footer h2 { margin: 0 0 24px; font-weight: 300; font-size: clamp(30px, 4vw, 52px
     <div class="hero-row">
       <div>
         <h1 class="rise d1">Детейлинг<br>автомобиля</h1>
-        <p class="lead rise d2">Возвращаем машине вид из салона: полировка, керамика, химчистка. Запись через Telegram за одну минуту.</p>
+        <p class="lead rise d2">Возвращаем машине вид из салона: полировка, керамика, химчистка. Запись по телефону за одну минуту.</p>
       </div>
       <a class="pill big rise d2" href="#services">Выбрать услугу →</a>
     </div>
   </section>
 
-  <section id="services">
+  <section id="about" class="block reveal">
+    <h2>Возвращаем машине идеальный вид</h2>
+    <p class="big-text">Мы не просто моем и полируем. Сначала осматриваем кузов и салон, показываем, что можно исправить, называем цену и срок. Работаем аккуратно, как со своей машиной.</p>
+    <div class="facts">
+      <div><b>Бесплатный осмотр</b><span>скажем, что и как исправить</span></div>
+      <div><b>Фото до и после</b><span>вы видите весь процесс</span></div>
+      <div><b>Гарантия</b><span>на покрытия и на работы</span></div>
+    </div>
+  </section>
+
+  <section id="services" class="block dark reveal">
     <h2>Услуги</h2>
     <div class="cards">
-      <div class="card"><h3>Полировка кузова</h3><p>Убираем царапины и возвращаем глубокий блеск краски.</p><div class="price">от 8 000 ₽</div></div>
-      <div class="card"><h3>Керамика</h3><p>Защитное покрытие на годы: вода и грязь скатываются сами.</p><div class="price">от 25 000 ₽</div></div>
-      <div class="card"><h3>Химчистка салона</h3><p>Кожа, ткань, потолок и пластик. Без запахов и разводов.</p><div class="price">от 6 000 ₽</div></div>
-      <div class="card"><h3>Защитная плёнка</h3><p>Прозрачная броня от сколов и царапин.</p><div class="price">от 40 000 ₽</div></div>
+      <div class="card"><h3>Полировка кузова</h3><p>Убираем царапины и голограммы, возвращаем глубокий блеск краски.</p><ul><li>мойка и деконтаминация</li><li>абразивная и финишная полировка</li><li>срок: 1–2 дня</li></ul><div class="price">от 8 000 ₽</div></div>
+      <div class="card"><h3>Керамическое покрытие</h3><p>Защита на годы: вода и грязь скатываются сами, краска блестит.</p><ul><li>подготовка кузова</li><li>нанесение в несколько слоёв</li><li>срок: 2–3 дня</li></ul><div class="price">от 25 000 ₽</div></div>
+      <div class="card"><h3>Химчистка салона</h3><p>Кожа, ткань, потолок и пластик. Без запахов и разводов.</p><ul><li>глубокая чистка сидений и ковров</li><li>обработка кожи защитным составом</li><li>срок: 1 день</li></ul><div class="price">от 6 000 ₽</div></div>
+      <div class="card"><h3>Защитная плёнка</h3><p>Прозрачная броня от сколов, царапин и реагентов.</p><ul><li>капот, бампер, фары, пороги</li><li>или кузов целиком</li><li>срок: от 2 дней</li></ul><div class="price">от 40 000 ₽</div></div>
+      <div class="card"><h3>Детейлинг-мойка</h3><p>Бережная мойка в несколько этапов, каждая деталь отдельно.</p><ul><li>кузов, диски, арки, стёкла</li><li>сушка и защитный воск</li><li>срок: 3–4 часа</li></ul><div class="price">от 3 000 ₽</div></div>
+      <div class="card"><h3>Комплексный уход</h3><p>Полировка, керамика и салон за один визит: машина как из салона.</p><ul><li>всё самое нужное в одном пакете</li><li>выгоднее, чем по отдельности</li><li>срок: 3–5 дней</li></ul><div class="price">от 35 000 ₽</div></div>
     </div>
-    <div class="note">Макет: услуги и цены примерные, настоящие подставим после вашего ответа.</div>
+    <div class="note">Макет: услуги, цены и сроки примерные, настоящие подставим после вашего ответа.</div>
+  </section>
+
+  <section id="steps" class="block reveal">
+    <h2>Как проходит работа</h2>
+    <div class="steps">
+      <div><i>01</i><h3>Осмотр и расчёт</h3><p>Смотрим машину, показываем состояние краски и салона, называем точную цену.</p></div>
+      <div><i>02</i><h3>Запись</h3><p>Выбираем удобное время и подтверждаем по телефону.</p></div>
+      <div><i>03</i><h3>Работа</h3><p>Мастер делает работу, а вы получаете фото процесса.</p></div>
+      <div><i>04</i><h3>Приёмка</h3><p>Показываем результат при дневном свете и отдаём с гарантией.</p></div>
+    </div>
+  </section>
+
+  <section id="faq" class="block dark reveal">
+    <h2>Частые вопросы</h2>
+    <div class="faq">
+      <details><summary>Сколько стоит полировка?</summary><p>Зависит от состояния кузова и размера машины. Точную цену называем после осмотра, он бесплатный.</p></details>
+      <details><summary>Сколько делается керамика?</summary><p>Обычно 2–3 дня: подготовка кузова, нанесение и время на затвердевание.</p></details>
+      <details><summary>Можно приехать без записи?</summary><p>Лучше позвонить заранее, чтобы мастер был свободен и вам не пришлось ждать.</p></details>
+      <details><summary>Даёте гарантию?</summary><p>Да, на покрытия и на работы. Условия называем до начала, чтобы всё было понятно.</p></details>
+    </div>
   </section>
 </main>
 
-<footer id="contact">
-  <h2>Запишитесь за минуту</h2>
-  <a class="pill big" href="#">Написать в Telegram →</a>
+<footer id="contact" class="reveal">
+  <h2>Запишитесь по телефону</h2>
+  <a class="pill big" data-phone-link href="tel:+70000000000">Позвонить: <span data-phone-text>+7 (000) 000-00-00</span></a>
+  <p class="where">Адрес: Ваш город, улица Примерная, 1<br>Ежедневно с 9:00 до 21:00</p>
 </footer>
 
+<script>
+// Номер телефона меняется ТОЛЬКО здесь: он подставится в шапку, кнопки и подвал.
+var PHONE = '+7 (000) 000-00-00';
+(function () {
+  var raw = 'tel:' + PHONE.replace(/[^\d+]/g, '');
+  document.querySelectorAll('[data-phone-text]').forEach(function (el) { el.textContent = PHONE; });
+  document.querySelectorAll('[data-phone-link]').forEach(function (el) { el.setAttribute('href', raw); });
+  var blocks = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) { blocks.forEach(function (b) { b.classList.add('in'); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  blocks.forEach(function (b) { io.observe(b); });
+})();
+</script>
 <script>
 // Заставка длится около 4 секунд. Пропустить: нажатие или любая клавиша. Без анимации (prefers-reduced-motion) сайт открывается сразу.
 (function () {
