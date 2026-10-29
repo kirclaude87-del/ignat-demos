@@ -88,10 +88,30 @@
     setStage(stageOf(goal));
     raf = cur === goal ? 0 : requestAnimationFrame(tick);
   }
+  // Когда стакан налит и прокрутка остановилась, убираем «закреплённую» длинную часть сцены:
+  // дальше страница листается как обычная, без зависания. Картинка на экране при этом не прыгает.
+  let idleTimer = 0;
+  function finishScene() {
+    const vh = window.innerHeight;
+    const top = scene.getBoundingClientRect().top + window.scrollY; // где сцена начинается на странице
+    const oldH = scene.offsetHeight;
+    const y = window.scrollY;
+    scene.classList.add("done");
+    const ny = y <= top ? y : Math.max(top, y - (oldH - scene.offsetHeight));
+    window.scrollTo({ top: ny, behavior: "instant" });
+    removeEventListener("scroll", onScroll);
+    removeEventListener("resize", onScroll);
+    goal = 1;
+    setStage(4);
+    if (!raf) raf = requestAnimationFrame(tick);
+    window.__sloiState = Object.assign(window.__sloiState || {}, { done: true });
+  }
   function onScroll() {
     goal = target();
     setStage(stageOf(goal));
     if (!raf) raf = requestAnimationFrame(tick);
+    clearTimeout(idleTimer);
+    if (goal >= 0.985) idleTimer = setTimeout(finishScene, 200);
   }
   addEventListener("scroll", onScroll, { passive: true });
   addEventListener("resize", onScroll);

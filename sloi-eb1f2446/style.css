@@ -176,3 +176,7 @@ footer { background: var(--ink); color: var(--cream); padding: 44px 0; }
 /* 3D-режим: рисует WebGL, плоские слова и SVG-стакан прячем */
 .gl { position: absolute; inset: 0; z-index: 1; }
 html.gl .words, html.gl .glass { display: none; }
+
+/* стакан уже налит: убираем длинную закреплённую часть, дальше обычная страница */
+.scene.done { height: 100svh; }
+.scene.done .stage { position: relative; }
