@@ -23,19 +23,6 @@ body {
 }
 a { color: inherit; }
 
-/* шапка всегда на месте: закреплена сверху, на сплошной подложке, читается на любом экране и не меняет цвет при прокрутке */
-.top {
-  position: fixed; inset: 0 0 auto 0; z-index: 20; height: 60px;
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 0 clamp(16px, 4vw, 40px); color: var(--ink);
-  background: var(--cream); box-shadow: 0 1px 0 rgba(26, 15, 10, .08);
-  transform: translateZ(0);
-}
-.top a { text-decoration: none; }
-.logo { font-family: var(--display); font-weight: 700; font-size: 20px; letter-spacing: -.02em; }
-.top nav { display: flex; gap: 22px; font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; }
-#menu, #stol { scroll-margin-top: 60px; }
-
 /* сцена со стаканом: высокая секция, внутри липкий экран */
 .scene { position: relative; height: 520svh; }
 .stage {
@@ -134,7 +121,7 @@ button[type="submit"] {
   padding: 18px 28px; cursor: pointer; transition: background .25s, transform .25s;
 }
 button[type="submit"]:hover { background: var(--espresso); transform: translateY(-2px); }
-button[type="submit"]:focus-visible, .top a:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+button[type="submit"]:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .msg { margin: 0; min-height: 1.5em; font-weight: 500; color: #1f6b3a; }
 .msg.err { color: #b3261e; }
 
