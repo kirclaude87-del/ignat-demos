@@ -58,10 +58,14 @@
     dots.forEach((el, n) => el.classList.toggle("on", n === s));
   }
 
+  // Стакан наливается один раз: прогресс только растёт, при прокрутке вверх он остаётся налитым
+  let peak = 0;
   function target() {
     const r = scene.getBoundingClientRect();
     const total = scene.offsetHeight - window.innerHeight;
-    return clamp(-r.top / total);
+    peak = Math.max(peak, clamp(-r.top / total));
+    window.__sloiState = Object.assign(window.__sloiState || {}, { peak });
+    return peak;
   }
 
   // Режим для проверок: ?p=0.5 фиксирует прогресс (скриншоты, тесты)
@@ -86,6 +90,7 @@
   }
   function onScroll() {
     goal = target();
+    setStage(stageOf(goal));
     if (!raf) raf = requestAnimationFrame(tick);
   }
   addEventListener("scroll", onScroll, { passive: true });
