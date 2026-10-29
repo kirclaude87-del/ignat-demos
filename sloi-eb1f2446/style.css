@@ -23,15 +23,18 @@ body {
 }
 a { color: inherit; }
 
-/* шапка лежит внутри первого экрана и двигается вместе с ним (раньше была fixed и «плавала» при смене панелей браузера) */
+/* шапка всегда на месте: закреплена сверху, на сплошной подложке, читается на любом экране и не меняет цвет при прокрутке */
 .top {
-  position: absolute; inset: 0 0 auto 0; z-index: 4;
+  position: fixed; inset: 0 0 auto 0; z-index: 20; height: 60px;
   display: flex; justify-content: space-between; align-items: center;
-  padding: 18px clamp(16px, 4vw, 40px); color: var(--ink);
+  padding: 0 clamp(16px, 4vw, 40px); color: var(--ink);
+  background: var(--cream); box-shadow: 0 1px 0 rgba(26, 15, 10, .08);
+  transform: translateZ(0);
 }
 .top a { text-decoration: none; }
 .logo { font-family: var(--display); font-weight: 900; font-size: 20px; letter-spacing: -.02em; }
 .top nav { display: flex; gap: 22px; font-size: 14px; font-weight: 500; text-transform: uppercase; letter-spacing: .08em; }
+#menu, #stol { scroll-margin-top: 60px; }
 
 /* сцена со стаканом: высокая секция, внутри липкий экран */
 .scene { position: relative; height: 520svh; }
