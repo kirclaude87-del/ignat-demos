@@ -216,8 +216,12 @@ vec3 liquidColor(float y) {
   window.__sloiGL = api;
   setLevel(1.86);
 
+  let lastW = 0, lastH = 0;
   function resize() {
     const w = stage.clientWidth, h = stage.clientHeight;
+    // панели браузера на телефоне меняют высоту на 50–150 px: не перерисовываем сцену из-за этого
+    if (lastW && w === lastW && Math.abs(h - lastH) < 160) return;
+    lastW = w; lastH = h;
     renderer.setSize(w, h, false);
     renderer.domElement.style.width = w + "px";
     renderer.domElement.style.height = h + "px";
