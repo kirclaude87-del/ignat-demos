@@ -1,4 +1,5 @@
 // Стакан наполняется, пока листаешь: progress 0..1 -> слои жидкости, слова, подписи.
+document.documentElement.classList.add("js"); // без JS разделы видны сразу (см. .reveal в style.css)
 (() => {
   const scene = document.getElementById("scene");
   if (!scene) return;
@@ -80,12 +81,12 @@
     return;
   }
 
-  let cur = 0, goal = target(), raf = 0;
+  let cur = 0, goal = target(), raf = 0, finished = false;
   function tick() {
     cur += (goal - cur) * 0.14;
     if (Math.abs(goal - cur) < 0.0005) cur = goal;
     render(cur);
-    setStage(stageOf(goal));
+    if (!finished) setStage(stageOf(goal));
     raf = cur === goal ? 0 : requestAnimationFrame(tick);
   }
   // Когда стакан налит и прокрутка остановилась, убираем «закреплённую» длинную часть сцены:
@@ -102,7 +103,9 @@
     removeEventListener("scroll", onScroll);
     removeEventListener("resize", onScroll);
     goal = 1;
-    setStage(4);
+    // история закончилась: полный стакан, снова «слои», заголовок и кнопка брони (как в режиме без анимации)
+    finished = true;
+    setStage(0);
     if (!raf) raf = requestAnimationFrame(tick);
     window.__sloiState = Object.assign(window.__sloiState || {}, { done: true });
   }
@@ -126,7 +129,7 @@
   const sel = document.getElementById("timeSel");
   for (let h = 8; h <= 21; h++) {
     const o = document.createElement("option");
-    o.textContent = `${String(h).padStart(2, "0")}:00`;
+    o.textContent = `${String(h).padStart(2, "0")}:00`; // taste-skill-ignore: это часы (08:00), не нумерация
     if (h === 19) o.selected = true;
     sel.append(o);
   }
@@ -145,4 +148,25 @@
     form.reset();
     sel.value = "19:00";
   });
+})();
+
+// Части разделов появляются по очереди, когда раздел доходит до экрана.
+// Проверяем по положению, а не по пересечению: если страницу перемотали рывком (или сцена схлопнулась),
+// всё, что уже выше нижнего края экрана, тоже показываем — ничего не остаётся спрятанным.
+(() => {
+  let pending = [...document.querySelectorAll(".reveal")];
+  let raf = 0;
+  function check() {
+    raf = 0;
+    pending = pending.filter((el) => {
+      if (el.getBoundingClientRect().top > innerHeight * 0.92) return true;
+      el.classList.add("in");
+      return false;
+    });
+    if (!pending.length) { removeEventListener("scroll", onScroll); removeEventListener("resize", onScroll); }
+  }
+  function onScroll() { if (!raf) raf = requestAnimationFrame(check); }
+  addEventListener("scroll", onScroll, { passive: true });
+  addEventListener("resize", onScroll);
+  check();
 })();

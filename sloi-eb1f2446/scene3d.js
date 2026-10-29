@@ -147,19 +147,17 @@ vec3 liquidColor(float y) {
     bgCanvas.width = Math.round(w * k); bgCanvas.height = Math.round(h * k);
     const c = bgCanvas.getContext("2d");
     c.scale(k, k);
-    const g = c.createRadialGradient(w / 2, h * 1.1, 0, w / 2, h * 1.1, h * 1.1);
-    g.addColorStop(0, "#e6d6bd"); g.addColorStop(0.6, "#f1e9dc"); g.addColorStop(1, "#f1e9dc");
-    c.fillStyle = "#f1e9dc"; c.fillRect(0, 0, w, h);
-    c.fillStyle = g; c.fillRect(0, 0, w, h);
-    const portrait = w < 700;
+    c.fillStyle = "#eeedea"; c.fillRect(0, 0, w, h); // ровный молочный фон, как --ground в style.css
+    const portrait = w < 700 || h > w; // так же, как в layout()
     c.textAlign = "center"; c.textBaseline = "alphabetic"; c.fillStyle = "#1a0f0a";
     if ("letterSpacing" in c) c.letterSpacing = "-0.04em";
     WORDS.forEach(([text, vw], i) => {
       const a = wordAlpha[i];
       if (a < 0.01) return;
-      const fs = Math.min((vw * w) / 100, 0.56 * h);
+      // на телефоне слово стоит над трубочкой: высота не больше 11% экрана, иначе «лёд» налезает на стакан
+      const fs = Math.min((vw * w) / 100, portrait ? 0.11 * h : 0.56 * h);
       c.font = `600 ${fs}px Unbounded, "Arial Black", sans-serif`;
-      let cy = portrait ? 0.11 * h + fs * 0.78 : h * 0.5 + fs * 0.34;
+      let cy = portrait ? 0.07 * h + fs * 0.95 : h * 0.5 + fs * 0.34;
       if (i === 4 && !portrait) cy -= 0.12 * h;
       c.globalAlpha = a;
       c.fillText(text, w / 2, cy + (1 - a) * 0.06 * fs);
@@ -174,7 +172,7 @@ vec3 liquidColor(float y) {
   const sc = sh.getContext("2d"), sg = sc.createRadialGradient(64, 64, 0, 64, 64, 64);
   sg.addColorStop(0, "rgba(26,15,10,.42)"); sg.addColorStop(1, "rgba(26,15,10,0)");
   sc.fillStyle = sg; sc.fillRect(0, 0, 128, 128);
-  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(2.3, 2.3), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(sh), transparent: true, depthWrite: false }));
+  const shadow = new THREE.Mesh(new THREE.PlaneGeometry(2.3, 2.3), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(sh), transparent: true, depthWrite: false })); // taste-skill-ignore: тень 3D-стакана на столе, не тень элемента страницы
   shadow.rotation.x = -Math.PI / 2; shadow.position.y = -0.004; shadow.renderOrder = 1;
   world.add(shadow);
 
@@ -235,9 +233,10 @@ vec3 liquidColor(float y) {
     camera.position.set(0, 0, dist);
     camera.lookAt(0, 0, 0);
     const vis = 2 * dist * Math.tan((camera.fov * Math.PI) / 360); // высота видимой области на глубине стакана
-    const frac = portrait ? 0.38 : 0.56; // какую долю высоты экрана занимает стакан
+    const frac = portrait ? 0.30 : 0.56; // какую долю высоты экрана занимает стакан
     const s = (vis * frac) / H;
-    const centerFrac = portrait ? 0.6 : 0.6; // где по вертикали центр стакана (от верха экрана)
+    // на телефоне стакан чуть выше: снизу остаётся место для заголовка и кнопки брони
+    const centerFrac = portrait ? 0.47 : 0.6; // где по вертикали центр стакана (от верха экрана)
     world.scale.setScalar(s);
     world.position.y = (0.5 - centerFrac) * vis - (H / 2) * s;
     if (state.poster) { // стакан с трубочкой по центру кадра
