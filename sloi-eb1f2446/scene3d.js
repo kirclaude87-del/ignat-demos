@@ -7,6 +7,13 @@ import { RGBELoader } from "./vendor/RGBELoader.js";
 
 const stage = document.querySelector(".stage");
 const state = window.__sloiState || { p: 0, stage: 0 };
+// Режим постера: poster.html рисует один стакан по рецепту на белом и чёрном фоне, из пары кадров получается PNG с прозрачностью
+const RECIPES = {
+  1: { c: ["#2a140a", "#7b4a2b", "#ecd9b9", "#fff6e6"], b: [0.7, 0.95, 1.55], ice: 5 }, // слои
+  2: { c: ["#d3801a", "#3a1d0e", "#efdcbc", "#fff2dc"], b: [0.5, 0.78, 1.6], ice: 4 },  // мёд-латте
+  3: { c: ["#cfe0d6", "#cfe0d6", "#4a2a18", "#2a140a"], b: [0.5, 1.5, 1.72], ice: 5 }, // эспрессо-тоник
+  4: { c: ["#f1e3c8", "#f1e3c8", "#7e9a3a", "#fff6e6"], b: [0.5, 0.9, 1.66], ice: 3 }, // матча
+};
 
 // ---------- размеры стакана (единицы сцены) ----------
 const H = 2.2, R_TOP = 0.68, R_BOT = 0.5, FLOOR = 0.2;
@@ -26,6 +33,7 @@ function init() {
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.NoToneMapping;
   renderer.domElement.className = "gl";
+  if (state.poster) renderer.setClearColor(new THREE.Color(state.bg || "#ffffff"), 1);
   stage.prepend(renderer.domElement);
   document.documentElement.classList.add("gl");
 
@@ -49,15 +57,26 @@ function init() {
     [R_TOP, H], [R_TOP - 0.012, H + 0.014], [R_TOP - 0.03, H],
     [R_BOT + 0.005, FLOOR + 0.03], [R_BOT - 0.04, FLOOR + 0.002], [0.0, FLOOR],
   ].map(([x, y]) => new THREE.Vector2(x, y));
+  // Стенки: чистое стекло без мути. Рисуем только отражения студийного света и добавляем их поверх сцены.
   const glass = new THREE.Mesh(
-    new THREE.LatheGeometry(glassProfile, 96),
-    new THREE.MeshPhysicalMaterial({
-      color: 0xffffff, transmission: 1, thickness: 0.15, ior: 1.5, roughness: 0,
-      specularIntensity: 1, envMapIntensity: 0.55, clearcoat: 0.3, clearcoatRoughness: 0.03, side: THREE.DoubleSide,
+    new THREE.LatheGeometry(glassProfile, 128),
+    new THREE.MeshStandardMaterial({
+      color: 0x000000, metalness: 0, roughness: 0.04, envMapIntensity: 0.26,
+      transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide,
     })
   );
-  glass.renderOrder = 2;
-  world.add(glass);
+  glass.renderOrder = 5;
+  // тёмная кромка по краю стекла (так стекло видно на светлом фоне)
+  const rim = new THREE.Mesh(
+    glass.geometry,
+    new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false, side: THREE.DoubleSide,
+      vertexShader: "varying vec3 vN; varying vec3 vV; void main(){ vec4 mv = modelViewMatrix * vec4(position,1.0); vN = normalize(normalMatrix * normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }",
+      fragmentShader: "varying vec3 vN; varying vec3 vV; void main(){ float f = pow(1.0 - abs(dot(normalize(vN), normalize(vV))), 3.0); gl_FragColor = vec4(0.10, 0.06, 0.04, clamp(f * 0.8, 0.0, 0.7)); }",
+    })
+  );
+  rim.renderOrder = 4;
+  world.add(rim, glass);
 
   // ---------- жидкость: один объём, слои красятся по высоте в шейдере ----------
   const liquidProfile = [[0, FLOOR + 0.01]];
@@ -116,6 +135,7 @@ vec3 liquidColor(float y) {
   bgTex.colorSpace = THREE.SRGBColorSpace;
   const bgMesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: bgTex, toneMapped: false }));
   const BG_Z = 13;
+  bgMesh.visible = !state.poster;
   bgMesh.position.set(0, 0, -BG_Z);
   camera.add(bgMesh);
   scene.add(camera);
@@ -161,14 +181,14 @@ vec3 liquidColor(float y) {
   // ---------- трубочка в красно-белую полоску ----------
   const st = document.createElement("canvas"); st.width = 16; st.height = 64;
   const stc = st.getContext("2d");
-  stc.fillStyle = "#e5532d"; stc.fillRect(0, 0, 16, 64); stc.fillStyle = "#fbf5ea"; stc.fillRect(0, 0, 16, 28);
+  stc.fillStyle = "#f3eee4"; stc.fillRect(0, 0, 16, 64); stc.fillStyle = "#b4492b"; stc.fillRect(0, 0, 16, 9);
   const stripeTex = new THREE.CanvasTexture(st);
-  stripeTex.colorSpace = THREE.SRGBColorSpace; stripeTex.wrapT = THREE.RepeatWrapping; stripeTex.repeat.set(1, 26);
+  stripeTex.colorSpace = THREE.SRGBColorSpace; stripeTex.wrapT = THREE.RepeatWrapping; stripeTex.repeat.set(1, 22);
   const base = new THREE.Vector3(0.12, 0.3, 0.04), top = new THREE.Vector3(-0.1, 3.0, -0.02);
   const dir = top.clone().sub(base);
   const straw = new THREE.Mesh(
     new THREE.CylinderGeometry(0.04, 0.04, dir.length(), 20, 1, true),
-    new THREE.MeshPhysicalMaterial({ map: stripeTex, roughness: 0.3, clearcoat: 1, clearcoatRoughness: 0.15, side: THREE.DoubleSide })
+    new THREE.MeshPhysicalMaterial({ map: stripeTex, roughness: 0.62, clearcoat: 0.12, side: THREE.DoubleSide })
   );
   straw.position.copy(base).addScaledVector(dir, 0.5);
   straw.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.clone().normalize());
@@ -176,8 +196,9 @@ vec3 liquidColor(float y) {
 
   // ---------- лёд ----------
   const iceMat = new THREE.MeshPhysicalMaterial({
-    color: 0xd9eef9, roughness: 0.12, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.06,
-    envMapIntensity: 2.2, emissive: 0x7fb2d0, emissiveIntensity: 0.12,
+    color: 0xffffff, transmission: 1, thickness: 0.32, ior: 1.31, roughness: 0.07, metalness: 0,
+    envMapIntensity: 1.5, attenuationColor: new THREE.Color(0xbfe0f2), attenuationDistance: 0.9,
+    specularIntensity: 1, side: THREE.DoubleSide,
   });
   const iceSpec = [[-0.14, 2.0, 0.05, 0.3, 0.3], [0.14, 2.08, -0.06, 0.28, -0.5], [0.0, 1.95, 0.2, 0.27, 0.8], [0.2, 1.9, 0.1, 0.25, -0.2], [-0.2, 1.9, -0.12, 0.26, 1.1]];
   const ice = iceSpec.map(([x, y, z, size, rot], i) => {
@@ -215,6 +236,15 @@ vec3 liquidColor(float y) {
     const centerFrac = portrait ? 0.6 : 0.6; // где по вертикали центр стакана (от верха экрана)
     world.scale.setScalar(s);
     world.position.y = (0.5 - centerFrac) * vis - (H / 2) * s;
+    if (state.poster) { // стакан с трубочкой по центру кадра
+      const sp = (0.9 * vis) / 3.1;
+      world.scale.setScalar(sp);
+      world.position.y = -1.5 * sp;
+      uniforms.uWorld.value.set(world.position.y, sp);
+      bgMesh.scale.set(1e-3, 1e-3, 1);
+      api.vis = vis;
+      return;
+    }
     uniforms.uWorld.value.set(world.position.y, s);
     const bh = 2 * BG_Z * Math.tan((camera.fov * Math.PI) / 360);
     bgMesh.scale.set(bh * camera.aspect, bh, 1);
@@ -251,6 +281,15 @@ vec3 liquidColor(float y) {
     dirty = true;
   }
   api.onProgress = applyProgress;
+  if (state.poster) {
+    const r = RECIPES[state.poster] || RECIPES[1];
+    ["uEsp", "uMid", "uMilk", "uFoam"].forEach((k, i) => uniforms[k].value.set(r.c[i]));
+    uniforms.uB.value.set(r.b[0], r.b[1], r.b[2], 0.13);
+    api.onProgress = () => {};
+    setLevel(1.86);
+    ice.forEach((m, i) => { m.visible = i < r.ice; m.scale.setScalar(1); });
+    camera.position.set(0, 0.5, 9); camera.lookAt(0, 0, 0);
+  }
   api.onStage = (s) => { wordTarget = s; };
   wordTarget = state.stage || 0;
   wordAlpha.fill(0); wordAlpha[wordTarget] = 1;
@@ -266,7 +305,7 @@ vec3 liquidColor(float y) {
   }
   new IntersectionObserver(([e]) => { const was = running; running = e.isIntersecting; if (running && !was) frame(); }).observe(stage);
   resize();
-  applyProgress(state.p || 0);
+  if (!state.poster) applyProgress(state.p || 0);
   frame();
   document.documentElement.dataset.gl = "ready";
 }
