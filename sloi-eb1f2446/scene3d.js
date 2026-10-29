@@ -61,7 +61,7 @@ function init() {
   const glass = new THREE.Mesh(
     new THREE.LatheGeometry(glassProfile, 128),
     new THREE.MeshStandardMaterial({
-      color: 0x000000, metalness: 0, roughness: 0.04, envMapIntensity: 0.26,
+      color: 0x000000, metalness: 0, roughness: 0.04, envMapIntensity: 0.2,
       transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide,
     })
   );
@@ -153,12 +153,12 @@ vec3 liquidColor(float y) {
     c.fillStyle = g; c.fillRect(0, 0, w, h);
     const portrait = w < 700;
     c.textAlign = "center"; c.textBaseline = "alphabetic"; c.fillStyle = "#1a0f0a";
-    if ("letterSpacing" in c) c.letterSpacing = "-0.045em";
+    if ("letterSpacing" in c) c.letterSpacing = "-0.04em";
     WORDS.forEach(([text, vw], i) => {
       const a = wordAlpha[i];
       if (a < 0.01) return;
       const fs = Math.min((vw * w) / 100, 0.56 * h);
-      c.font = `900 ${fs}px Unbounded, "Arial Black", sans-serif`;
+      c.font = `600 ${fs}px Unbounded, "Arial Black", sans-serif`;
       let cy = portrait ? 0.11 * h + fs * 0.78 : h * 0.5 + fs * 0.34;
       if (i === 4 && !portrait) cy -= 0.12 * h;
       c.globalAlpha = a;
