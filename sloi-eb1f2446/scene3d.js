@@ -3,6 +3,7 @@
 import * as THREE from "three";
 import { RoomEnvironment } from "./vendor/RoomEnvironment.js";
 import { RoundedBoxGeometry } from "./vendor/RoundedBoxGeometry.js";
+import { RGBELoader } from "./vendor/RGBELoader.js";
 
 const stage = document.querySelector(".stage");
 const state = window.__sloiState || { p: 0, stage: 0 };
@@ -30,7 +31,13 @@ function init() {
 
   const scene = new THREE.Scene();
   const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.03).texture;
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.03).texture; // запасное освещение, пока грузится студийное
+  // настоящий студийный HDRI (Poly Haven, CC0): мягкие софтбоксы дают чёткие блики на стекле
+  new RGBELoader().load("./vendor/studio.hdr", (tex) => {
+    tex.mapping = THREE.EquirectangularReflectionMapping;
+    scene.environment = pmrem.fromEquirectangular(tex).texture;
+    tex.dispose();
+  }, undefined, () => {});
 
   const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 50);
   const world = new THREE.Group(); // сюда кладём всё, чтобы масштабировать под экран
