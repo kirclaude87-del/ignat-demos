@@ -27,7 +27,7 @@ body {
 a { color: inherit; }
 
 /* сцена со стаканом: высокая секция, внутри липкий экран */
-.scene { position: relative; height: 520svh; }
+.pour { position: relative; height: 520svh; }
 .stage {
   position: sticky; top: 0; height: 100svh; overflow: hidden;
   display: grid; place-items: center;
@@ -59,7 +59,7 @@ a { color: inherit; }
 @keyframes bob { 50% { translate: 0 -5px; rotate: 3deg; } }
 
 /* подписи и точки стоят на тех же полях, что меню и бронь */
-.caps { position: absolute; z-index: 3; left: max(var(--m), calc((100% - 1100px) / 2)); bottom: clamp(20px, 5svh, 48px); width: min(380px, 100% - 2 * var(--m)); }
+.caps { position: absolute; z-index: 3; left: max(var(--m), calc((100% - 1100px) / 2)); bottom: clamp(20px, 5svh, 48px); width: min(460px, 100% - 2 * var(--m)); }
 .cap {
   grid-area: 1 / 1; margin: 0; font-size: 17px; line-height: 1.45; position: absolute; bottom: 0; left: 0; width: 100%;
   opacity: 0; transform: translateY(10px); visibility: hidden;
@@ -67,7 +67,7 @@ a { color: inherit; }
 }
 .cap.on { opacity: 1; transform: none; visibility: visible; transition-delay: 0s; }
 .cap h2 { font-family: var(--display); font-weight: 600; font-size: 22px; line-height: 1.15; letter-spacing: -.02em; margin: 0 0 6px; }
-.cap h1 { font-family: var(--display); font-weight: 600; font-size: clamp(26px, 2.4vw, 34px); line-height: 1.1; letter-spacing: -.03em; margin: 0 0 8px; text-wrap: balance; }
+.cap h1 { font-family: var(--display); font-weight: 600; font-size: clamp(32px, 4.4vw, 52px); line-height: 1.05; letter-spacing: -.035em; margin: 0 0 12px; text-wrap: balance; }
 .cap p { margin: 0; }
 .cap p + .btn { margin-top: 16px; }
 .btn {
@@ -83,9 +83,9 @@ a { color: inherit; }
 .meter i.on { background: var(--ink); scale: 1.5; }
 
 /* без анимации: показываем готовый стакан и обычную страницу; лишние подписи убираем совсем */
-.scene.static { height: auto; }
-.scene.static .stage { position: relative; min-height: 100svh; }
-.scene.static .cap:not(:first-child) { display: none; }
+.pour.static { height: auto; }
+.pour.static .stage { position: relative; min-height: 100svh; }
+.pour.static .cap:not(:first-child) { display: none; }
 
 /* широкий экран: у слова «лёд» точки над «ё» поднимаем выше края стакана */
 @media (min-width: 701px) {
@@ -116,7 +116,7 @@ a { color: inherit; }
 .price { font-family: var(--display); font-weight: 500; font-size: clamp(18px, 2.4vw, 28px); font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 /* бронь */
-.book { padding: clamp(48px, 8vw, 110px) 0 clamp(72px, 11vw, 150px); }
+.book { background: var(--espresso); color: var(--ground); padding: clamp(72px, 10vw, 140px) 0; }
 .book-grid { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(32px, 6vw, 96px); align-items: end; }
 .lead { max-width: 36ch; margin: 0; }
 form { display: grid; gap: 22px; }
@@ -138,6 +138,21 @@ button[type="submit"]:active { transform: scale(.98); }
 :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .msg { margin: 0; min-height: 1.5em; font-weight: 500; color: #1f6b3a; }
 .msg.err { color: #b3261e; }
+
+/* бронь на сплошном тёмном поле: последний экран полный, а подвал отличается ступенью тона */
+.book .lead { color: #ddd9d3; font-size: clamp(18px, 1.6vw, 22px); max-width: 34ch; }
+.book label { color: #d3cdc6; font-size: 15px; }
+.book input, .book select { color: var(--ground); font-size: clamp(20px, 2vw, 26px); border-bottom-color: rgba(238, 237, 234, .7); caret-color: var(--ground); }
+.book select option { color: var(--ink); background: var(--ground); }
+.book input::placeholder { color: #aaa29a; }
+.book input:focus, .book select:focus { border-bottom-color: var(--ground); }
+.book input.bad { border-bottom-color: #ff9a92; }
+.book button[type="submit"] { background: var(--ground); color: var(--ink); font-size: 18px; padding: 22px 28px; }
+.book button[type="submit"]:hover { background: #ffffff; }
+.book :focus-visible { outline-color: var(--ground); }
+.book ::selection { background: var(--ground); color: var(--ink); }
+.book .msg { color: #9be0b3; }
+.book .msg.err { color: #ffb3ad; }
 
 footer { background: var(--ink); color: var(--ground); padding: 28px 0; font-size: 14px; }
 .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 32px; }
@@ -164,5 +179,5 @@ footer :focus-visible { outline-color: var(--ground); }
 html.gl .words, html.gl .glass { display: none; }
 
 /* стакан уже налит: убираем длинную закреплённую часть, дальше обычная страница */
-.scene.done { height: 100svh; }
-.scene.done .stage { position: relative; }
+.pour.done { height: 100svh; }
+.pour.done .stage { position: relative; }

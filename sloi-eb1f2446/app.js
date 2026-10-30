@@ -1,7 +1,7 @@
 // Стакан наполняется, пока листаешь: progress 0..1 -> слои жидкости, слова, подписи.
 document.documentElement.classList.add("js"); // без JS разделы видны сразу (см. .reveal в style.css)
 (() => {
-  const scene = document.getElementById("scene");
+  const scene = document.getElementById("pour");
   if (!scene) return;
 
   const $ = (s) => [...scene.querySelectorAll(s)];
